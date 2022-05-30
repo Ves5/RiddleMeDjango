@@ -1,0 +1,23 @@
+{% extends "riddleme/base.html" %}
+
+{% block title %} Logowanie {% endblock %}
+{% block navbar %} {% with activeLogin="active" %} {{block.super}} {% endwith %} {% endblock %}
+{% block content %}
+<div class="container mt-5" style="width: 25em">
+    <form class="container p-3" style="width: 25em" action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="username" class="form-label">Nazwa użytkownika</label>
+            <input type="text" class="form-control" id="username" name="username">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Hasło</label>
+            <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <button type="submit" class="btn btn-primary">Zaloguj</button>
+    </form>
+</div>
+{% endblock %}
+
+<!--<input type="password" class="form-control" id="password" aria-describedby="passwordHelp">
+        <div id="passwordHelp" class="form-text">Hasło musi posiadać:</div>-->

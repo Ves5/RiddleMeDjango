@@ -1,5 +1,7 @@
+
 {% extends "riddleme/base.html" %}
 {% block title %} Strona główna {% endblock %}
+{% block navbar %} {% with activeHome="active" %} {{block.super}} {% endwith %} {% endblock %}
 {% block content %} 
     <p> Część strony głównej </p> 
 {% endblock %}
