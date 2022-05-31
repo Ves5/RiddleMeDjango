@@ -15,7 +15,7 @@ def puzzle(request, puzzle_id):
     return HttpResponse(f"You're accessing puzzle {puzzle_id}")
 
 def user_profile(request):
-    return HttpResponse("Your profile page")
+    return render(request, 'riddleme/profile.html')
 
 def login_user(request):
     from django.contrib.auth import authenticate, login

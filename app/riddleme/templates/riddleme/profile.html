@@ -1,0 +1,35 @@
+
+{% extends "riddleme/base.html" %}
+{% block title %} Profil użytkownika {% endblock %}
+{% block navbar %} {% with activeProfile="active" %} {{block.super}} {% endwith %} {% endblock %}
+{% block content %} 
+<div class="card text-center mt-4 mx-auto" style="width: 40rem">
+    <div class="card-header">
+        Dane użytkownika
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{ user.get_username }}</h5>
+        <p class="card-text"> Data założenia konta: {{ user.get_username }} </p>
+        <hr>
+        <h6 class="card-title">Statystyki zagadek</h6>
+        <p class="card-text">Liczba rozwiązanych zagadek: {{ user.get_username }}</p>
+        <p class="card-text">Liczba przesłanych zgłoszeń rozwiązań: {{ user.get_username }}</p>
+        <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
+    </div>
+    <div class="card-footer text-muted">
+        Ostatnia aktywność: {{ user.get_username }}
+    </div>
+</div>
+<hr>
+<div class="card">
+    <div class="card-body">
+       <h5 class="card-title"> Rozpoczęte zagadki </h5>
+    </div>
+</div>
+<!-- for each puzzle of a user create a card with proper background 
+    green - solved
+    yellow - started but unsolved
+
+    card with puzzle title, date of solving (and maybe last submission?), liczbą odpowiedzi i linkiem do zagadki
+-->
+{% endblock %}

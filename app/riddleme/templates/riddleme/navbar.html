@@ -27,7 +27,7 @@
                     {{ user.get_username }}
                 </a>
                 <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="{% url 'profile' %}">Profil</a>
+                    <a class="dropdown-item {{ activeProfile|default:"" }}" href="{% url 'profile' %}">Profil użytkownika</a>
                     <a class="dropdown-item" href="{% url 'logout' %}">Wyloguj</a>
                     {% if user.is_superuser %}
                     <hr class="dropdown-divider">
