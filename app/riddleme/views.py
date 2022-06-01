@@ -2,13 +2,22 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib import messages
 from .models import Submitted, Puzzle, PuzzleStatistics
+from django.core.paginator import Paginator
 
 # Create your views here.
 def index(request):
     return render(request, 'riddleme/index.html')
 
 def page(request, page_num):
-    return HttpResponse(f"You're on page {page_num}")
+    puzzles = Puzzle.objects.all().order_by('id')
+    
+    paginator = Paginator(puzzles, per_page=6)
+    page_obj = paginator.get_page(page_num)
+    
+    context = {
+        "page_obj": page_obj
+        }
+    return render(request, 'riddleme/page.html', context)
 
 def puzzle(request, puzzle_id):
     return HttpResponse(f"You're accessing puzzle {puzzle_id}")
@@ -22,7 +31,7 @@ def user_profile(request):
         solved_count = Submitted.objects.filter(uid=user.id, correct=True) \
                                 .order_by('pid').values('pid').distinct().count()
         
-        puzzle_list = Submitted.objects.filter(uid=user.id, correct=True).select_related('pid')
+        puzzle_list = Submitted.objects.filter(uid=user.id, correct=True).order_by('date').select_related('pid')
         plist = [{
             "puzzle_title":entry.pid.title,
             "puzzle_id": entry.pid.id,

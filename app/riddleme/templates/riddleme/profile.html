@@ -27,13 +27,8 @@
     </div>
 </div>
 {% for puzzle in puzzle_list %}
+    {% include 'riddleme/profile_puzzle.html' with puzzle_title=puzzle.puzzle_title puzzle_id=puzzle.puzzle_id date=puzzle.date %}
 {% empty %}
 <p class="text-center text-muted mt-2"> Spróbuj rozwiązać jakąś zagadkę, żeby się tu pojawiła! </p>
 {% endfor %}
-<!-- for each puzzle of a user create a card with proper background 
-    green - solved
-    yellow - started but unsolved
-
-    card with puzzle title, date of solving (and maybe last submission?), liczbą odpowiedzi i linkiem do zagadki
--->
 {% endblock %}

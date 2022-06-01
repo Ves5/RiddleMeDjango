@@ -2,5 +2,28 @@
 {% block title %} Zagadki {% endblock %}
 {% block navbar %} {% with activePage="active" %} {{block.super}} {% endwith %} {% endblock %}
 {% block content %} 
-    
+
+{% for puzzle in page_obj%}
+    <pre> {{ puzzle.title }} </pre>
+{% endfor %}
+
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="{% url 'page' page_obj.previous_page_number %}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        {% endif%}
+        <li class="page-item"><a class="page-link text-muted" href="#">{{page_obj.number}} z {{page_obj.paginator.num_pages}}</a></li>
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{% url 'page' page_obj.next_page_number %}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        {% endif%}
+    </ul>
+</nav>
 {% endblock %}
