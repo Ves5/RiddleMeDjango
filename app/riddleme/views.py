@@ -1,8 +1,7 @@
-from multiprocessing.spawn import import_main_path
-from operator import imod
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib import messages
+from .models import Submitted, Puzzle, PuzzleStatistics
 
 # Create your views here.
 def index(request):
@@ -15,7 +14,31 @@ def puzzle(request, puzzle_id):
     return HttpResponse(f"You're accessing puzzle {puzzle_id}")
 
 def user_profile(request):
-    return render(request, 'riddleme/profile.html')
+    if request.user.is_authenticated:
+        user = request.user
+        
+        submit_count = Submitted.objects.filter(uid=user.id).count()
+        
+        solved_count = Submitted.objects.filter(uid=user.id, correct=True) \
+                                .order_by('pid').values('pid').distinct().count()
+        
+        puzzle_list = Submitted.objects.filter(uid=user.id, correct=True).select_related('pid')
+        plist = [{
+            "puzzle_title":entry.pid.title,
+            "puzzle_id": entry.pid.id,
+            "date": entry.date,
+          } for entry in puzzle_list]
+        
+        context = {
+            "creation_date": user.date_joined,
+            "solved_puzzles": solved_count,
+            "submitted_count": submit_count,
+            "last_activity": user.last_login,
+            "puzzle_list": plist
+        }
+        return render(request, 'riddleme/profile.html', context)
+    else:
+        return redirect('index')
 
 def login_user(request):
     from django.contrib.auth import authenticate, login
