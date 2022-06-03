@@ -2,8 +2,9 @@ from datetime import datetime
 from django.db import models
 from django.conf import settings
 from django.db.models import signals
-from django.dispatch import receiver
 
+
+default_datetime = datetime(year=1970, month=1, day=1)
 
 # Create your models here.
 class Puzzle(models.Model):

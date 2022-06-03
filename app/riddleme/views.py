@@ -1,7 +1,10 @@
+from datetime import datetime
+from statistics import correlation
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib import messages
-from .models import Submitted, Puzzle, PuzzleStatistics
+from .models import Submitted, Puzzle, PuzzleStatistics, default_datetime
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 
 # Create your views here.
@@ -9,9 +12,26 @@ def index(request):
     return render(request, 'riddleme/index.html')
 
 def page(request, page_num):
-    puzzles = Puzzle.objects.all().order_by('id')
+    puzzles = Puzzle.objects.all().order_by('-id')
+    user_count = User.objects.all().count()
+    puzzle_list = []
+    for puzzle in puzzles:
+        stats = PuzzleStatistics.objects.get(pid=puzzle)
+        solved = False
+        if request.user.is_authenticated:
+            user = request.user
+            if Submitted.objects.filter(uid=user, correct=True, pid=puzzle).exists():
+                solved = True
+        puzzle_entry = {
+            "puzzle_id": puzzle.id,
+            "puzzle_title": puzzle.title,
+            "solved": solved,
+            "solve_ratio": str(round((stats.solved_count/float(user_count)) * 100)) + "%",
+            "first_solve": stats.first_solve if stats.first_solve != default_datetime else 'Jeszcze nie rozwiązane'
+        }
+        puzzle_list.append(puzzle_entry)
     
-    paginator = Paginator(puzzles, per_page=6)
+    paginator = Paginator(puzzle_list, per_page=6)
     page_obj = paginator.get_page(page_num)
     
     context = {
@@ -83,7 +103,6 @@ def logout_user(request):
 
 def register_user(request):
     from .forms import RegisterForm
-    from django.contrib.auth.models import User
     from django.contrib.auth import login
     
     if request.method == "POST":
