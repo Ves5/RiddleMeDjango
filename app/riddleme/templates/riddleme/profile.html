@@ -3,7 +3,7 @@
 {% block title %} Profil użytkownika {% endblock %}
 {% block navbar %} {% with activeProfile="active" %} {{block.super}} {% endwith %} {% endblock %}
 {% block content %} 
-<div class="card text-center mt-4 mx-auto" style="width: 40rem">
+<div class="card text-center mt-4 mx-auto" style="max-width: 40rem">
     <div class="card-header">
         Dane użytkownika
     </div>
@@ -26,9 +26,11 @@
        <h5 class="card-title border-bottom pb-1 mb-1"> Rozwiązane zagadki </h5>
     </div>
 </div>
+<div class="d-flex justify-content-center flex-wrap">
 {% for puzzle in puzzle_list %}
     {% include 'riddleme/profile_puzzle.html' with puzzle_title=puzzle.puzzle_title puzzle_id=puzzle.puzzle_id date=puzzle.date %}
 {% empty %}
-<p class="text-center text-muted mt-2"> Spróbuj rozwiązać jakąś zagadkę, żeby się tu pojawiła! </p>
+    <p class="text-center text-muted mt-2"> Spróbuj rozwiązać jakąś zagadkę, żeby się tu pojawiła! </p>
 {% endfor %}
+</div>
 {% endblock %}

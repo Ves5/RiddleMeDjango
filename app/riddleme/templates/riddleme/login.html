@@ -3,8 +3,8 @@
 {% block title %} Logowanie {% endblock %}
 {% block navbar %} {% with activeLogin="active" %} {{block.super}} {% endwith %} {% endblock %}
 {% block content %}
-<div class="container mt-5" style="width: 25em">
-    <form class="container p-3" style="width: 25em" action="{% url 'login' %}" method="post">
+<div class="container mt-5" style="max-width: 25em">
+    <form class="container p-3" style="max-width: 25em" action="{% url 'login' %}" method="post">
         {% csrf_token %}
         <div class="mb-3">
             <label for="username" class="form-label">Nazwa użytkownika</label>

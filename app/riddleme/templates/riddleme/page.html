@@ -3,9 +3,11 @@
 {% block navbar %} {% with activePage="active" %} {{block.super}} {% endwith %} {% endblock %}
 {% block content %} 
 
-{% for puzzle in page_obj%}
-    <pre> {{ puzzle.title }} </pre>
-{% endfor %}
+<div class="d-flex justify-content-center flex-wrap mt-3 mb-3">
+    {% for puzzle in page_obj%}
+        {% include 'riddleme/list_puzzle.html' with puzzle_id=puzzle.puzzle_id puzzle_title=puzzle.puzzle_title solved=puzzle.solved solve_ratio=puzzle.solve_ratio first_solve=puzzle.first_solve %}
+    {% endfor %}
+</div>
 
 <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
@@ -16,7 +18,7 @@
                 </a>
             </li>
         {% endif%}
-        <li class="page-item"><a class="page-link text-muted" href="#">{{page_obj.number}} z {{page_obj.paginator.num_pages}}</a></li>
+        <li class="page-item"><a class="page-link text-muted" href="#">Strona {{page_obj.number}} z {{page_obj.paginator.num_pages}}</a></li>
         {% if page_obj.has_next %}
             <li class="page-item">
                 <a class="page-link" href="{% url 'page' page_obj.next_page_number %}" aria-label="Next">

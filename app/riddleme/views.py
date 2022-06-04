@@ -1,11 +1,10 @@
-from datetime import datetime
-from statistics import correlation
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
 from django.contrib import messages
 from .models import Submitted, Puzzle, PuzzleStatistics, default_datetime
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.utils.timezone import localtime
+from django.utils import timezone
 
 # Create your views here.
 def index(request):
@@ -27,7 +26,7 @@ def page(request, page_num):
             "puzzle_title": puzzle.title,
             "solved": solved,
             "solve_ratio": str(round((stats.solved_count/float(user_count)) * 100)) + "%",
-            "first_solve": stats.first_solve if stats.first_solve != default_datetime else 'Jeszcze nie rozwiązane'
+            "first_solve": stats.first_solve if stats.first_solve != default_datetime else 'jeszcze nie rozwiązana!'
         }
         puzzle_list.append(puzzle_entry)
     
@@ -40,7 +39,58 @@ def page(request, page_num):
     return render(request, 'riddleme/page.html', context)
 
 def puzzle(request, puzzle_id):
-    return HttpResponse(f"You're accessing puzzle {puzzle_id}")
+    puzzle = Puzzle.objects.get(pk=puzzle_id)
+    solved = False
+    
+    if request.method == "POST":
+        answer = request.POST['answer']
+        answer = str.strip(answer)
+        
+        if puzzle.answer == answer:
+            solved = True
+        
+        date = localtime(timezone.now())
+        
+        Submitted.objects.create(
+            uid=request.user, 
+            pid=puzzle, 
+            submitted=answer, 
+            date=date, 
+            correct=solved
+        )
+        
+        if solved:
+            messages.success(request, "Brawo, udało ci się rozwiązać zagadkę!")
+            stat = PuzzleStatistics.objects.get(pid=puzzle)
+            stat.first_solve = date
+            stat.solved_count = stat.solved_count + 1
+            stat.save()
+        else:
+            messages.warning(request, f"\"{answer}\" nie było poprawną odpowiedzią.")
+        return redirect('puzzle', puzzle.id)
+    
+    subs = []
+    if request.user.is_authenticated:
+        submissions = Submitted.objects.filter(pid=puzzle, uid=request.user).order_by("-date")[:10]
+    
+        for sub in submissions:
+            subs.append({
+                "answer": sub.submitted,
+                "date": sub.date,
+                "correct": sub.correct
+            })
+            if sub.correct:
+                solved = True
+            
+    
+    context = {
+        "puzzle_id": puzzle.id,
+        "puzzle_title": puzzle.title,
+        "puzzle_content": puzzle.content,
+        "submissions": subs,
+        "solved": solved
+        }
+    return render(request, 'riddleme/puzzle.html', context)
 
 def user_profile(request):
     if request.user.is_authenticated:
@@ -51,7 +101,7 @@ def user_profile(request):
         solved_count = Submitted.objects.filter(uid=user.id, correct=True) \
                                 .order_by('pid').values('pid').distinct().count()
         
-        puzzle_list = Submitted.objects.filter(uid=user.id, correct=True).order_by('date').select_related('pid')
+        puzzle_list = Submitted.objects.filter(uid=user.id, correct=True).order_by('-date').select_related('pid')
         plist = [{
             "puzzle_title":entry.pid.title,
             "puzzle_id": entry.pid.id,

@@ -1,0 +1,17 @@
+<div class="card text-center m-3" style="max-width: 45%; min-width: 35%">
+    <div class="card-header {% if solved %} bg-success text-white {% endif %} ">
+        {% if solved %}
+        Rozwiązana
+        {% else %}
+        Nierozwiązana
+        {% endif %}
+    </div>
+    <div class="card-body">
+        <h5 class="card-title border-bottom pb-1 mb-1">{{ puzzle_title }}</h5>
+        <p class="card-text">Pierwsze rozwiązanie: {{ first_solve }}</p>
+        <p class="card-text">Rozwiązane przez {{ solve_ratio }} użytkowników.</p>
+    </div>
+    <div class="card-footer text-muted">
+        <a href="{% url 'puzzle' puzzle_id %}" class="btn btn-secondary">Przejdź do zagadki</a>
+    </div>
+</div>

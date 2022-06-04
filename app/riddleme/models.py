@@ -1,10 +1,12 @@
 from datetime import datetime
+from django.utils import timezone
 from django.db import models
 from django.conf import settings
 from django.db.models import signals
 
 
-default_datetime = datetime(year=1970, month=1, day=1)
+default_datetime = timezone.make_aware(datetime(year=1970, month=1, day=1))
+
 
 # Create your models here.
 class Puzzle(models.Model):
