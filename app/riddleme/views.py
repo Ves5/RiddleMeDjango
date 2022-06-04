@@ -96,16 +96,17 @@ def user_profile(request):
     if request.user.is_authenticated:
         user = request.user
         
-        submit_count = Submitted.objects.filter(uid=user.id).count()
+        submit_count = Submitted.objects.filter(uid=user).count()
         
-        solved_count = Submitted.objects.filter(uid=user.id, correct=True) \
+        solved_count = Submitted.objects.filter(uid=user, correct=True) \
                                 .order_by('pid').values('pid').distinct().count()
         
-        puzzle_list = Submitted.objects.filter(uid=user.id, correct=True).order_by('-date').select_related('pid')
+        puzzle_list = Submitted.objects.filter(uid=user, correct=True).order_by('-date').select_related('pid')
         plist = [{
             "puzzle_title":entry.pid.title,
             "puzzle_id": entry.pid.id,
             "date": entry.date,
+            "sub_count": Submitted.objects.filter(uid=user, pid=entry.pid).count()
           } for entry in puzzle_list]
         
         context = {

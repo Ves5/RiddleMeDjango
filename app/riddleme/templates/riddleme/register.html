@@ -4,7 +4,7 @@
 {% block navbar %} {% with activeRegister="active" %} {{block.super}} {% endwith %} {% endblock %}
 
 {% block content %}
-<div class="container mt-5" style="max-width: 25em">
+<div class="container pt-5" style="max-width: 25em">
     <form class="container p-3" style="max-width: 25em" action="{% url 'register' %}" method="post">
         {% csrf_token %}
         <div class="mb-3">

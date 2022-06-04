@@ -2,10 +2,10 @@
 {% block title %} {{ puzzle_title }} {% endblock %}
 {% block navbar %} {{block.super}} {% endblock %}
 {% block content %}
-<div class="d-flex flex-wrap mt-3">
+<div class="d-flex flex-wrap pt-3">
     <div class="card flex-grow-1">
         <div class="card-body">
-            <h5 class="card-title border-bottom pb-1 mb-1"> {{ puzzle_title }} </h5>
+            <h5 class="card-title border-bottom pb-1 pb-1"> {{ puzzle_title }} </h5>
             <p class="card-text" style="height: 80%">
                 {{ puzzle_content | safe }}
             </p>

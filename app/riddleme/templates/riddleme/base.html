@@ -28,9 +28,9 @@
 
         <title>RiddleMe - {% block title %}{% endblock %}</title>
     </head>
-    <body class="bg-light">
+    <body class="bg-light h-100">
         <div id="navbar" class="container bg">{% block navbar %}{% include 'riddleme/navbar.html' %}{% endblock %}</div>
         {% block messages %}{% include 'riddleme/messages.html' %}{% endblock %}
-        <div id="content" class="container">{% block content %}{% endblock %}</div>
+        <div id="content" class="container h-100 py-0">{% block content %}{% endblock %}</div>
     </body>
 </html>

@@ -3,7 +3,7 @@
 {% block navbar %} {% with activePage="active" %} {{block.super}} {% endwith %} {% endblock %}
 {% block content %} 
 
-<div class="d-flex justify-content-center flex-wrap mt-3 mb-3">
+<div class="d-flex justify-content-center flex-wrap pt-3 pb-3">
     {% for puzzle in page_obj%}
         {% include 'riddleme/list_puzzle.html' with puzzle_id=puzzle.puzzle_id puzzle_title=puzzle.puzzle_title solved=puzzle.solved solve_ratio=puzzle.solve_ratio first_solve=puzzle.first_solve %}
     {% endfor %}
