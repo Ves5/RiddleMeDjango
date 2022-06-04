@@ -51,9 +51,9 @@ def puzzle(request, puzzle_id):
     
     if request.method == "POST":
         answer = request.POST['answer']
-        answer = str.strip(answer)
+        answer = str.strip(answer).lower()
         
-        if puzzle.answer == answer:
+        if str.lower(puzzle.answer) == answer:
             solved = True
         
         date = localtime(timezone.now())
