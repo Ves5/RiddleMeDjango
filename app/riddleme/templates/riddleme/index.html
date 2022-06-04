@@ -20,7 +20,7 @@
                     Aktualnie dostepnych jest {{ puzzle_count }} zagadek, z czego {{ unsolved_count }} pozostaje wciąż bez odpowiedzi.
                 </p>
                 <p class="card-text">
-                    Całą listę dostępnych łamigłówek umysłowych można znaleźć <a href="{% url 'page' 1 %}" class="inline btn btn-secondary">w liście zagadek</a>
+                    Całą listę dostępnych łamigłówek można znaleźć <a href="{% url 'page' 1 %}" class="inline btn btn-secondary">tutaj</a>
                 </p>
                 <p class="card-text">
                     <b>Powodzenia!</b>
@@ -28,6 +28,12 @@
             </div>
             <img src="{% static 'riddleme/favicon/favicon-big.png' %}" width="200" height="200" class="rounded d-block" alt=""/>
         </div>
+        <hr>
+        <h5 class="card-title">Uwagi/Wskazówki</h5>
+        <p class="card-text">
+            W trakcie rozwiązywania zagadek często potrzebne jest wsparcie ogólnodostepnych źródeł wiedzy (takich jak np. <a href="https://www.wikipedia.org/">Wikipedia</a>) lub narzędzi dostępnych przez inne witryny (np. <a href="https://www.boxentriq.com/code-breaking/numbers-to-letters">konwersja liczb do liter (nie ASCII)</a>). 
+            <br>Warto też pamiętać, że treść zagadki nie jest jedyną częścią wartą uwagi - tytuły mogą skrywać wskazówki, gdzie kierować się tokiem myślenia w celu odkrycia rozwiązania. 
+        </p>
         <hr>
         {% if user.is_authenticated %}
         <p class="card-text">
