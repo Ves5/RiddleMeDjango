@@ -8,7 +8,14 @@ from django.utils import timezone
 
 # Create your views here.
 def index(request):
-    return render(request, 'riddleme/index.html')
+    puzzle_count = Puzzle.objects.all().count()
+    unsolved_count = PuzzleStatistics.objects.filter(first_solve=default_datetime).count()
+    
+    context = {
+        "puzzle_count": puzzle_count,
+        "unsolved_count": unsolved_count,
+    }
+    return render(request, 'riddleme/index.html', context)
 
 def page(request, page_num):
     puzzles = Puzzle.objects.all().order_by('-id')
@@ -135,7 +142,7 @@ def login_user(request):
             # send message about log in
             messages.success(request, f"Zalogowano poprawnie na użytkownika: {username}.")
             # redirect to index or profile page
-            return redirect('index')
+            return redirect('profile')
         else:
             # wrong credentials
             messages.error(request, f"Nazwa użytkownika lub hasło jest niepoprawne, spróbuj ponownie.")

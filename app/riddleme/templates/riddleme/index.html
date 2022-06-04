@@ -1,7 +1,47 @@
-
 {% extends "riddleme/base.html" %}
+
+{% load static %}
+
 {% block title %} Strona główna {% endblock %}
 {% block navbar %} {% with activeHome="active" %} {{block.super}} {% endwith %} {% endblock %}
 {% block content %} 
-    <p> Część strony głównej </p> 
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">
+            Witaj na RiddleMe{% if user.is_authenticated %}, {{user.get_username}}{% endif %}!
+        </h4>
+        <hr>
+        <div class="d-flex justify-content-between">
+            <div>
+                <p class="card-text">
+                    RiddleMe jest prostym portalem pozwalającym na sprawdzenie swoich sił przez rozwiązywanie zagadek!
+                </p>
+                <p class="card-text">
+                    Aktualnie dostepnych jest {{ puzzle_count }} zagadek, z czego {{ unsolved_count }} pozostaje wciąż bez odpowiedzi.
+                </p>
+                <p class="card-text">
+                    Całą listę dostępnych łamigłówek umysłowych można znaleźć <a href="{% url 'page' 1 %}" class="inline btn btn-secondary">w liście zagadek</a>
+                </p>
+                <p class="card-text">
+                    <b>Powodzenia!</b>
+                </p>
+            </div>
+            <img src="{% static 'riddleme/favicon/favicon-big.png' %}" width="200" height="200" class="rounded d-block" alt=""/>
+        </div>
+        <hr>
+        {% if user.is_authenticated %}
+        <p class="card-text">
+            Jeśli chcesz zobaczyć swoje statystyki, przejdź do swojego <a href="{% url 'profile' %}" class="inline btn btn-secondary">profilu użytkownika</a>.
+            <br>Możesz tam także znaleźć historię rozwiązanych zagadek!
+        </p>
+        {% else %}
+        <p class="card-text">
+            Żeby rozpocząć swoją zabawę z zagadkami najpierw należy <a href="{% url 'login' %}" class="inline btn btn-secondary">zalogować się</a> na swoje konto!
+        </p>
+        <p class="card-text">
+            Jeżeli nie masz konta, możesz je założyć <a href="{% url 'register'%}" class="inline btn btn-secondary">tutaj</a>
+        </p>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
