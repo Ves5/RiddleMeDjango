@@ -14,14 +14,20 @@ class Puzzle(models.Model):
     content = models.TextField(verbose_name="Zawartość")
     answer = models.CharField(max_length=150, verbose_name="Odpowiedź")
     
+    def __str__(self):
+        return f"{self.id}, {self.title}"
+    
     class Meta:
         verbose_name = "Zagadka"
         verbose_name_plural = "Zagadki"
     
 class PuzzleStatistics(models.Model):
-    pid = models.OneToOneField(Puzzle, on_delete=models.CASCADE, verbose_name="ID zagadki")
+    pid = models.OneToOneField(Puzzle, on_delete=models.CASCADE, verbose_name="Zagadka")
     solved_count = models.IntegerField(default=0, verbose_name="Liczba rozwiązań")
     first_solve = models.DateTimeField(verbose_name="Data pierwszego rozwiązania")
+    
+    def __str__(self):
+        return f"Statystyki {self.id} dla {self.pid.title}"
     
     class Meta:
         verbose_name = "Statystyki zagadek"
@@ -36,11 +42,14 @@ def create_stats(sender, instance, created, **kwargs):
 signals.post_save.connect(create_stats, sender=Puzzle, weak=False, dispatch_uid="riddleme.models.create_stats")
     
 class Submitted(models.Model):
-    pid = models.ForeignKey(Puzzle, on_delete=models.CASCADE, verbose_name="ID zagadki")
-    uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="ID użytkownika")
+    pid = models.ForeignKey(Puzzle, on_delete=models.CASCADE, verbose_name="Zagadka")
+    uid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Użytkownik")
     submitted = models.CharField(max_length=150, verbose_name="Zgłoszona odpowiedź")
     date = models.DateTimeField(verbose_name="Data zgłoszenia odpowiedzi")
     correct = models.BooleanField(verbose_name="Czy poprawna odpowiedź")
+    
+    def __str__(self):
+        return f"Zgłoszenie {self.submitted} do {self.pid.title} od {self.uid.username}"
     
     class Meta:
         verbose_name = "Zgłoszenie"
